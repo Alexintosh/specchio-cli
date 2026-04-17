@@ -1,10 +1,10 @@
 # Homebrew Formula for Specchio Setup
 
-This directory contains the Homebrew formula for distributing the `specchio-setup` CLI.
+This directory contains the Homebrew formula for distributing the `specchio` CLI.
 
 ## Files
 
-- `specchio-setup.rb` - The Homebrew formula definition
+- `specchio.rb` - The Homebrew formula definition
 - `update-formula.sh` - Helper script to build binaries and update checksums
 
 ## Creating a New Release
@@ -27,16 +27,16 @@ This will:
 1. Go to the [GitHub Releases page](https://github.com/Alexintosh/specchio/releases)
 2. Create a new release with tag `v{version}`
 3. Upload the binaries:
-   - `specchio-setup-arm64`
-   - `specchio-setup-x64`
+   - `specchio-arm64`
+   - `specchio-x64`
 
 ### 3. Test the Formula
 
 Before releasing, test the formula locally:
 
 ```bash
-brew install --build-from-source specchio-setup.rb
-specchio-setup --version
+brew install --build-from-source specchio.rb
+specchio --version
 ```
 
 ### 4. Submit to Homebrew
@@ -44,7 +44,7 @@ specchio-setup --version
 For a tap, simply commit and push the updated formula:
 
 ```bash
-git add brew/specchio-setup.rb
+git add brew/specchio.rb
 git commit -m "Bump version to {version}"
 git push
 ```
@@ -65,14 +65,14 @@ Test the formula locally before pushing:
 
 ```bash
 # Install from local file
-brew install --build-from-source brew/specchio-setup.rb
+brew install --build-from-source brew/specchio.rb
 
 # Test basic functionality
-specchio-setup --version
-specchio-setup --help
+specchio --version
+specchio --help
 
 # Uninstall
-brew uninstall specchio-setup
+brew uninstall specchio
 ```
 
 ## Troubleshooting
@@ -91,10 +91,10 @@ Make sure you're building for the correct target:
 
 ```bash
 # Apple Silicon
-bun build --compile --target=bun-darwin-arm64 --outfile specchio-setup-arm64 src/index.ts
+bun build --compile --target=bun-darwin-arm64 --outfile specchio-arm64 src/index.ts
 
 # Intel
-bun build --compile --target=bun-darwin-x64 --outfile specchio-setup-x64 src/index.ts
+bun build --compile --target=bun-darwin-x64 --outfile specchio-x64 src/index.ts
 ```
 
 ### Bottle URLs

@@ -22,10 +22,10 @@ bun run build:all
 ```
 
 **Output:**
-- `specchio-setup-arm64` - ARM64 binary
-- `specchio-setup-x64` - x86_64 binary
-- `specchio-setup-arm64.sha256` - ARM64 checksum
-- `specchio-setup-x64.sha256` - x86_64 checksum
+- `specchio-arm64` - ARM64 binary
+- `specchio-x64` - x86_64 binary
+- `specchio-arm64.sha256` - ARM64 checksum
+- `specchio-x64.sha256` - x86_64 checksum
 
 ---
 
@@ -120,10 +120,10 @@ git push origin v1.0.0  # Use your version
 2. Click "Draft a new release"
 3. Select the tag you just pushed
 4. Upload the binaries and checksums:
-   - `specchio-setup-arm64`
-   - `specchio-setup-x64`
-   - `specchio-setup-arm64.sha256`
-   - `specchio-setup-x64.sha256`
+   - `specchio-arm64`
+   - `specchio-x64`
+   - `specchio-arm64.sha256`
+   - `specchio-x64.sha256`
 5. Add release notes
 6. Publish the release
 

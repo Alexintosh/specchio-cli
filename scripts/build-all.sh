@@ -38,25 +38,25 @@ echo ""
 
 # Clean previous builds
 print_info "Cleaning previous builds..."
-rm -f specchio-setup-arm64 specchio-setup-x64 *.sha256
+rm -f specchio-arm64 specchio-x64 *.sha256
 print_success "Clean complete"
 
 # Build for ARM64 (Apple Silicon)
 print_info "Building for ARM64 (Apple Silicon)..."
-bun build --compile --target=bun-darwin-arm64 --outfile specchio-setup-arm64 src/index.ts
-chmod +x specchio-setup-arm64
-print_success "ARM64 binary built: specchio-setup-arm64"
+bun build --compile --target=bun-darwin-arm64 --outfile specchio-arm64 src/index.ts
+chmod +x specchio-arm64
+print_success "ARM64 binary built: specchio-arm64"
 
 # Build for x86_64 (Intel)
 print_info "Building for x86_64 (Intel)..."
-bun build --compile --target=bun-darwin-x64 --outfile specchio-setup-x64 src/index.ts
-chmod +x specchio-setup-x64
-print_success "x86_64 binary built: specchio-setup-x64"
+bun build --compile --target=bun-darwin-x64 --outfile specchio-x64 src/index.ts
+chmod +x specchio-x64
+print_success "x86_64 binary built: specchio-x64"
 
 # Generate checksums
 print_info "Generating SHA256 checksums..."
-shasum -a 256 specchio-setup-arm64 > specchio-setup-arm64.sha256
-shasum -a 256 specchio-setup-x64 > specchio-setup-x64.sha256
+shasum -a 256 specchio-arm64 > specchio-arm64.sha256
+shasum -a 256 specchio-x64 > specchio-x64.sha256
 print_success "Checksums generated"
 
 # Display build summary
@@ -64,10 +64,10 @@ echo ""
 echo "=== Build Summary ==="
 echo ""
 echo "Binaries:"
-ls -lh specchio-setup-arm64 specchio-setup-x64 | awk '{print "  " $9 " - " $5}'
+ls -lh specchio-arm64 specchio-x64 | awk '{print "  " $9 " - " $5}'
 echo ""
 echo "Checksums:"
-echo "  ARM64: $(cat specchio-setup-arm64.sha256 | awk '{print $1}')"
-echo "  x64:   $(cat specchio-setup-x64.sha256 | awk '{print $1}')"
+echo "  ARM64: $(cat specchio-arm64.sha256 | awk '{print $1}')"
+echo "  x64:   $(cat specchio-x64.sha256 | awk '{print $1}')"
 echo ""
 print_success "All builds completed successfully!"

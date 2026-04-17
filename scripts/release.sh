@@ -91,8 +91,8 @@ print_success "All binaries built successfully"
 
 # Step 4: Generate checksums
 print_info "Step 4: Generating SHA256 checksums..."
-shasum -a 256 specchio-setup-arm64 > specchio-setup-arm64.sha256
-shasum -a 256 specchio-setup-x64 > specchio-setup-x64.sha256
+shasum -a 256 specchio-arm64 > specchio-arm64.sha256
+shasum -a 256 specchio-x64 > specchio-x64.sha256
 print_success "Checksums generated"
 
 # Step 5: Create git tag
@@ -109,12 +109,12 @@ echo ""
 echo "=== Release $NEW_VERSION is ready! ==="
 echo ""
 echo "Built binaries:"
-echo "  - specchio-setup-arm64"
-echo "  - specchio-setup-x64"
+echo "  - specchio-arm64"
+echo "  - specchio-x64"
 echo ""
 echo "Checksums:"
-echo "  - specchio-setup-arm64.sha256"
-echo "  - specchio-setup-x64.sha256"
+echo "  - specchio-arm64.sha256"
+echo "  - specchio-x64.sha256"
 echo ""
 echo "Git changes:"
 echo "  - Commit created with version bump"
@@ -126,10 +126,10 @@ echo "  git push origin main"
 echo "  git push origin $TAG_NAME"
 echo ""
 echo "Then create a GitHub release with the following assets:"
-echo "  - specchio-setup-arm64"
-echo "  - specchio-setup-x64"
-echo "  - specchio-setup-arm64.sha256"
-echo "  - specchio-setup-x64.sha256"
+echo "  - specchio-arm64"
+echo "  - specchio-x64"
+echo "  - specchio-arm64.sha256"
+echo "  - specchio-x64.sha256"
 echo ""
 echo "Don't forget to update the Homebrew formula:"
 echo "  https://github.com/Alexintosh/homebrew-specchio"

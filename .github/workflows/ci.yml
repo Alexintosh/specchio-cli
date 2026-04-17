@@ -39,8 +39,8 @@ jobs:
       - name: Verify binary executes
         working-directory: ./cli
         run: |
-          ./specchio-setup --version || true
-          ./specchio-setup --help || true
+          ./specchio --version || true
+          ./specchio --help || true
 
   required-checks:
     name: Required Status Checks

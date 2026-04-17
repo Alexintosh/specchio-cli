@@ -30,7 +30,7 @@ import {
 } from './guides/index.js';
 
 const VERSION = '1.0.0';
-const CLI_NAME = 'specchio-setup';
+const CLI_NAME = 'specchio';
 
 /**
  * Parse command line arguments
@@ -89,10 +89,10 @@ function showHelp(command?: string): void {
   if (command === 'check') {
     printHighlight('Check Commands:');
     printBlank();
-    printCommand('specchio-setup check');
+    printCommand('specchio check');
     printBullet('Run all system checks');
     printBlank();
-    printCommand('specchio-setup check <name>');
+    printCommand('specchio check <name>');
     printBullet('Run a specific check');
     printBlank();
     printHighlight('Available checks:');
@@ -112,22 +112,22 @@ function showHelp(command?: string): void {
 
   printHighlight('Commands:');
   printBlank();
-  printCommand('specchio-setup');
+  printCommand('specchio');
   printBullet('Interactive setup wizard (default)');
   printBlank();
-  printCommand('specchio-setup setup');
+  printCommand('specchio setup');
   printBullet('Start interactive setup wizard');
   printBlank();
-  printCommand('specchio-setup check [name]');
+  printCommand('specchio check [name]');
   printBullet('Run all checks or a specific check');
   printBlank();
-  printCommand('specchio-setup fix');
+  printCommand('specchio fix');
   printBullet('Attempt to automatically fix issues');
   printBlank();
-  printCommand('specchio-setup doctor');
+  printCommand('specchio doctor');
   printBullet('Show diagnostic information');
   printBlank();
-  printCommand('specchio-setup verify');
+  printCommand('specchio verify');
   printBullet('Verify current setup status');
   printBlank();
 
@@ -436,10 +436,10 @@ async function runVerify(): Promise<void> {
     printBlank();
     printInfo('See https://specchio.dev/device-setup for detailed instructions');
   } else {
-    printWarning('Some checks failed. Run "specchio-setup fix" to attempt automatic fixes.');
+    printWarning('Some checks failed. Run "specchio fix" to attempt automatic fixes.');
     printBlank();
     printInfo('Or run the interactive setup wizard:');
-    printCommand('specchio-setup');
+    printCommand('specchio');
   }
 }
 

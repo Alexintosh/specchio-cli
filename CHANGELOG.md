@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-04-17
 
 ### Added
-- Initial release of specchio-setup CLI
+- Initial release of specchio CLI
 - Interactive setup wizard for Specchio iOS development environment
 - System checks for macOS version, Xcode, iOS SDK, certificates, and devices
 - Automatic issue detection and guided fixes

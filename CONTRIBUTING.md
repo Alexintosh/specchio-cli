@@ -19,8 +19,8 @@ Before creating bug reports, please check the existing issues to avoid duplicate
 - **Include environment details**:
   - OS version (run `sw_vers`)
   - Xcode version (run `xcodebuild -version`)
-  - CLI version (run `specchio-setup --version`)
-  - Output of `specchio-setup doctor`
+  - CLI version (run `specchio --version`)
+  - Output of `specchio doctor`
 
 ### Suggesting Enhancements
 
@@ -80,8 +80,8 @@ bun run build
 bun run build:standalone
 
 # Build for specific architectures
-bun build --compile --target=bun-darwin-arm64 --outfile specchio-setup-arm64 src/index.ts
-bun build --compile --target=bun-darwin-x64 --outfile specchio-setup-x64 src/index.ts
+bun build --compile --target=bun-darwin-arm64 --outfile specchio-arm64 src/index.ts
+bun build --compile --target=bun-darwin-x64 --outfile specchio-x64 src/index.ts
 ```
 
 ### Testing
@@ -155,13 +155,13 @@ cli/
 2. Update the VERSION constant in `src/index.ts`
 3. Build binaries for both architectures:
    ```bash
-   bun build --compile --target=bun-darwin-arm64 --outfile specchio-setup-arm64 src/index.ts
-   bun build --compile --target=bun-darwin-x64 --outfile specchio-setup-x64 src/index.ts
+   bun build --compile --target=bun-darwin-arm64 --outfile specchio-arm64 src/index.ts
+   bun build --compile --target=bun-darwin-x64 --outfile specchio-x64 src/index.ts
    ```
 4. Generate SHA256 checksums:
    ```bash
-   shasum -a 256 specchio-setup-arm64
-   shasum -a 256 specchio-setup-x64
+   shasum -a 256 specchio-arm64
+   shasum -a 256 specchio-x64
    ```
 5. Update the Homebrew formula with the new checksums
 6. Create a new GitHub release with the binaries

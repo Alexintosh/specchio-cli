@@ -30,7 +30,7 @@ print_test() {
 }
 
 # Check if binary exists
-if [ ! -f "specchio-setup-arm64" ] && [ ! -f "specchio-setup-x64" ]; then
+if [ ! -f "specchio-arm64" ] && [ ! -f "specchio-x64" ]; then
     print_error "No binaries found. Please build first using scripts/build-all.sh"
     exit 1
 fi
@@ -39,15 +39,15 @@ fi
 BINARY=""
 ARCH=$(uname -m)
 if [ "$ARCH" = "arm64" ]; then
-    if [ -f "specchio-setup-arm64" ]; then
-        BINARY="./specchio-setup-arm64"
+    if [ -f "specchio-arm64" ]; then
+        BINARY="./specchio-arm64"
     else
         print_error "ARM64 binary not found for this ARM64 Mac"
         exit 1
     fi
 elif [ "$ARCH" = "x86_64" ]; then
-    if [ -f "specchio-setup-x64" ]; then
-        BINARY="./specchio-setup-x64"
+    if [ -f "specchio-x64" ]; then
+        BINARY="./specchio-x64"
     else
         print_error "x86_64 binary not found for this Intel Mac"
         exit 1

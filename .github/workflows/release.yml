@@ -35,21 +35,21 @@ jobs:
       - name: Build for ARM64 (Apple Silicon)
         working-directory: ./cli
         run: |
-          bun build --compile --target=bun-darwin-arm64 --outfile specchio-setup-arm64 src/index.ts
-          chmod +x specchio-setup-arm64
+          bun build --compile --target=bun-darwin-arm64 --outfile specchio-arm64 src/index.ts
+          chmod +x specchio-arm64
 
       - name: Build for x64 (Intel)
         working-directory: ./cli
         run: |
-          bun build --compile --target=bun-darwin-x64 --outfile specchio-setup-x64 src/index.ts
-          chmod +x specchio-setup-x64
+          bun build --compile --target=bun-darwin-x64 --outfile specchio-x64 src/index.ts
+          chmod +x specchio-x64
 
       - name: Generate SHA256 checksums
         working-directory: ./cli
         run: |
           echo "Generating checksums..."
-          ARM64_SHA256=$(shasum -a 256 specchio-setup-arm64 | awk '{print $1}')
-          X64_SHA256=$(shasum -a 256 specchio-setup-x64 | awk '{print $1}')
+          ARM64_SHA256=$(shasum -a 256 specchio-arm64 | awk '{print $1}')
+          X64_SHA256=$(shasum -a 256 specchio-x64 | awk '{print $1}')
 
           echo "ARM64_SHA256=$ARM64_SHA256" >> $GITHUB_ENV
           echo "X64_SHA256=$X64_SHA256" >> $GITHUB_ENV
@@ -58,13 +58,13 @@ jobs:
           echo "x64 SHA256:   $X64_SHA256"
 
           # Create checksums file
-          echo "$ARM64_SHA256  specchio-setup-arm64" > checksums.txt
-          echo "$X64_SHA256  specchio-setup-x64" >> checksums.txt
+          echo "$ARM64_SHA256  specchio-arm64" > checksums.txt
+          echo "$X64_SHA256  specchio-x64" >> checksums.txt
 
       - name: Create universal binary wrapper
         working-directory: ./cli
         run: |
-          cat > specchio-setup << 'EOF'
+          cat > specchio << 'EOF'
           #!/bin/bash
           # Universal wrapper for Specchio Setup CLI
 
@@ -73,10 +73,10 @@ jobs:
 
           case "$ARCH" in
             arm64|aarch64)
-              exec "$(dirname "$0")/specchio-setup-arm64" "$@"
+              exec "$(dirname "$0")/specchio-arm64" "$@"
               ;;
             x86_64|i386)
-              exec "$(dirname "$0")/specchio-setup-x64" "$@"
+              exec "$(dirname "$0")/specchio-x64" "$@"
               ;;
             *)
               echo "Error: Unsupported architecture: $ARCH" >&2
@@ -85,15 +85,15 @@ jobs:
           esac
           EOF
 
-          chmod +x specchio-setup
+          chmod +x specchio
 
       - name: Upload release assets
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            cli/specchio-setup-arm64
-            cli/specchio-setup-x64
-            cli/specchio-setup
+            cli/specchio-arm64
+            cli/specchio-x64
+            cli/specchio
             cli/checksums.txt
           generate_release_notes: true
           draft: false
@@ -107,28 +107,28 @@ jobs:
           VERSION="${{ steps.version.outputs }}"
 
           # Update version in formula
-          sed -i.bak "s/tag:      \"v[^\"]*\"/tag:      \"v$VERSION\"/g" specchio-setup.rb
-          sed -i.bak "s/root_url \"https:\/\/github.com\/Alexintosh\/specchio\/releases\/download\/v[^\"]*\"/root_url \"https:\/\/github.com\/Alexintosh\/specchio\/releases\/download\/v$VERSION\"/g" specchio-setup.rb
+          sed -i.bak "s/tag:      \"v[^\"]*\"/tag:      \"v$VERSION\"/g" specchio.rb
+          sed -i.bak "s/root_url \"https:\/\/github.com\/Alexintosh\/specchio\/releases\/download\/v[^\"]*\"/root_url \"https:\/\/github.com\/Alexintosh\/specchio\/releases\/download\/v$VERSION\"/g" specchio.rb
 
           # Update checksums
-          sed -i.bak "s/arm64_sonoma:   \"[^\"]*\"/arm64_sonoma:   \"${{ env.ARM64_SHA256 }}\"/g" specchio-setup.rb
-          sed -i.bak "s/arm64_ventura:  \"[^\"]*\"/arm64_ventura:  \"${{ env.ARM64_SHA256 }}\"/g" specchio-setup.rb
-          sed -i.bak "s/arm64_monterey: \"[^\"]*\"/arm64_monterey: \"${{ env.ARM64_SHA256 }}\"/g" specchio-setup.rb
-          sed -i.bak "s/x86_64_sonoma:   \"[^\"]*\"/x86_64_sonoma:   \"${{ env.X64_SHA256 }}\"/g" specchio-setup.rb
-          sed -i.bak "s/x86_64_ventura:  \"[^\"]*\"/x86_64_ventura:  \"${{ env.X64_SHA256 }}\"/g" specchio-setup.rb
-          sed -i.bak "s/x86_64_monterey: \"[^\"]*\"/x86_64_monterey: \"${{ env.X64_SHA256 }}\"/g" specchio-setup.rb
+          sed -i.bak "s/arm64_sonoma:   \"[^\"]*\"/arm64_sonoma:   \"${{ env.ARM64_SHA256 }}\"/g" specchio.rb
+          sed -i.bak "s/arm64_ventura:  \"[^\"]*\"/arm64_ventura:  \"${{ env.X64_SHA256 }}\"/g" specchio.rb
+          sed -i.bak "s/arm64_monterey: \"[^\"]*\"/arm64_monterey: \"${{ env.X64_SHA256 }}\"/g" specchio.rb
+          sed -i.bak "s/x86_64_sonoma:   \"[^\"]*\"/x86_64_sonoma:   \"${{ env.X64_SHA256 }}\"/g" specchio.rb
+          sed -i.bak "s/x86_64_ventura:  \"[^\"]*\"/x86_64_ventura:  \"${{ env.X64_SHA256 }}\"/g" specchio.rb
+          sed -i.bak "s/x86_64_monterey: \"[^\"]*\"/x86_64_monterey: \"${{ env.X64_SHA256 }}\"/g" specchio.rb
 
           # Clean up backup
-          rm -f specchio-setup.rb.bak
+          rm -f specchio.rb.bak
 
           echo "Updated formula:"
-          cat specchio-setup.rb
+          cat specchio.rb
 
       - name: Commit formula changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add cli/brew/specchio-setup.rb
+          git add cli/brew/specchio.rb
           git commit -m "chore: update Homebrew formula for v${{ steps.version.outputs }}"
           git push
 
@@ -137,19 +137,19 @@ jobs:
           echo "## Release v${{ steps.version.outputs }} created successfully! :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Binaries" >> $GITHUB_STEP_SUMMARY
-          echo "- **specchio-setup-arm64**: ${{ env.ARM64_SHA256 }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **specchio-setup-x64**: ${{ env.X64_SHA256 }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **specchio-setup**: Universal wrapper" >> $GITHUB_STEP_SUMMARY
+          echo "- **specchio-arm64**: ${{ env.ARM64_SHA256 }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **specchio-x64**: ${{ env.X64_SHA256 }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **specchio**: Universal wrapper" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Installation" >> $GITHUB_STEP_SUMMARY
           echo '```bash' >> $GITHUB_STEP_SUMMARY
           echo "# Download and install" >> $GITHUB_STEP_SUMMARY
-          echo "curl -fsSL https://github.com/Alexintosh/specchio/releases/download/v${{ steps.version.outputs }}/specchio-setup -o specchio-setup" >> $GITHUB_STEP_SUMMARY
-          echo "chmod +x specchio-setup" >> $GITHUB_STEP_SUMMARY
-          echo "./specchio-setup" >> $GITHUB_STEP_SUMMARY
+          echo "curl -fsSL https://github.com/Alexintosh/specchio/releases/download/v${{ steps.version.outputs }}/specchio -o specchio" >> $GITHUB_STEP_SUMMARY
+          echo "chmod +x specchio" >> $GITHUB_STEP_SUMMARY
+          echo "./specchio" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Homebrew" >> $GITHUB_STEP_SUMMARY
           echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "brew install Alexintosh/specchio/specchio-setup" >> $GITHUB_STEP_SUMMARY
+          echo "brew install Alexintosh/specchio/specchio" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY

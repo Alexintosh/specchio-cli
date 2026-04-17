@@ -1,7 +1,7 @@
 # Specchio Setup CLI
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Homebrew](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/Alexintosh/homebrew-specchio/main/formula/specchio-setup.json&label=homebrew&query=$.version&color=blue)](https://github.com/Alexintosh/homebrew-specchio)
+[![Homebrew](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/Alexintosh/homebrew-specchio/main/formula/specchio.json&label=homebrew&query=$.version&color=blue)](https://github.com/Alexintosh/homebrew-specchio)
 
 **Interactive setup CLI for Specchio iOS development environment.**
 
@@ -11,23 +11,23 @@ Specchio Setup CLI simplifies the process of setting up a macOS development envi
 
 ### Via Homebrew (Recommended)
 
-The easiest way to install `specchio-setup` is via Homebrew:
+The easiest way to install `specchio` is via Homebrew:
 
 ```bash
 brew tap Alexintosh/specchio
-brew install specchio-setup
+brew install specchio
 ```
 
 To upgrade to the latest version:
 
 ```bash
-brew upgrade specchio-setup
+brew upgrade specchio
 ```
 
 To uninstall:
 
 ```bash
-brew uninstall specchio-setup
+brew uninstall specchio
 ```
 
 ### Manual Installation
@@ -36,14 +36,14 @@ Alternatively, you can download the binary directly from [GitHub Releases](https
 
 ```bash
 # For Apple Silicon (ARM64)
-curl -L https://github.com/Alexintosh/specchio/releases/latest/download/specchio-setup-arm64 -o specchio-setup
-chmod +x specchio-setup
-sudo mv specchio-setup /usr/local/bin/
+curl -L https://github.com/Alexintosh/specchio/releases/latest/download/specchio-arm64 -o specchio
+chmod +x specchio
+sudo mv specchio /usr/local/bin/
 
 # For Intel (x86_64)
-curl -L https://github.com/Alexintosh/specchio/releases/latest/download/specchio-setup-x64 -o specchio-setup
-chmod +x specchio-setup
-sudo mv specchio-setup /usr/local/bin/
+curl -L https://github.com/Alexintosh/specchio/releases/latest/download/specchio-x64 -o specchio
+chmod +x specchio
+sudo mv specchio /usr/local/bin/
 ```
 
 ## Features
@@ -63,7 +63,7 @@ sudo mv specchio-setup /usr/local/bin/
 The default command starts an interactive setup wizard that guides you through the entire process:
 
 ```bash
-specchio-setup
+specchio
 ```
 
 The wizard will:
@@ -77,31 +77,31 @@ The wizard will:
 
 ### Commands
 
-#### `specchio-setup check` - Run System Checks
+#### `specchio check` - Run System Checks
 
 Run all system checks to verify your development environment:
 
 ```bash
-specchio-setup check
+specchio check
 ```
 
 Run a specific check:
 
 ```bash
-specchio-setup check macos         # Check macOS version
-specchio-setup check xcode         # Check Xcode installation
-specchio-setup check license       # Check Xcode license status
-specchio-setup check ios-sdk       # Check iOS SDK installation
-specchio-setup check certificate   # Check code signing certificate
-specchio-setup check device        # Check connected iOS device
+specchio check macos         # Check macOS version
+specchio check xcode         # Check Xcode installation
+specchio check license       # Check Xcode license status
+specchio check ios-sdk       # Check iOS SDK installation
+specchio check certificate   # Check code signing certificate
+specchio check device        # Check connected iOS device
 ```
 
-#### `specchio-setup fix` - Automatic Issue Resolution
+#### `specchio fix` - Automatic Issue Resolution
 
 Attempt to automatically fix common issues:
 
 ```bash
-specchio-setup fix
+specchio fix
 ```
 
 This command will try to:
@@ -109,12 +109,12 @@ This command will try to:
 - Configure Xcode developer tools
 - Fix common certificate issues
 
-#### `specchio-setup doctor` - Diagnostic Information
+#### `specchio doctor` - Diagnostic Information
 
 Display detailed diagnostic information about your system:
 
 ```bash
-specchio-setup doctor
+specchio doctor
 ```
 
 Output includes:
@@ -126,20 +126,20 @@ Output includes:
 
 **Include this output when reporting bugs!**
 
-#### `specchio-setup verify` - Verify Setup Status
+#### `specchio verify` - Verify Setup Status
 
 Check if your system is ready for Specchio development:
 
 ```bash
-specchio-setup verify
+specchio verify
 ```
 
 ### Options
 
 ```bash
-specchio-setup --help, -h     # Show help message
-specchio-setup --version, -v  # Show version information
-specchio-setup --verbose      # Show detailed output
+specchio --help, -h     # Show help message
+specchio --version, -v  # Show version information
+specchio --verbose      # Show detailed output
 ```
 
 ## Examples
@@ -148,33 +148,33 @@ specchio-setup --verbose      # Show detailed output
 
 ```bash
 # Start the interactive setup wizard
-specchio-setup
+specchio
 
 # Or run checks first to see what needs to be configured
-specchio-setup check
+specchio check
 
 # Then fix any issues automatically
-specchio-setup fix
+specchio fix
 ```
 
 ### Troubleshooting
 
 ```bash
 # Get diagnostic information
-specchio-setup doctor
+specchio doctor
 
 # Check a specific component
-specchio-setup check xcode
+specchio check xcode
 
 # Verify your setup is complete
-specchio-setup verify
+specchio verify
 ```
 
 ### Quick Status Check
 
 ```bash
 # Run all checks
-specchio-setup check
+specchio check
 
 # Expected output:
 # ✓ macOS 14.0 or later
@@ -218,8 +218,8 @@ bun run build
 bun run build:standalone
 
 # Build for specific architectures
-bun build --compile --target=bun-darwin-arm64 --outfile specchio-setup-arm64 src/index.ts
-bun build --compile --target=bun-darwin-x64 --outfile specchio-setup-x64 src/index.ts
+bun build --compile --target=bun-darwin-arm64 --outfile specchio-arm64 src/index.ts
+bun build --compile --target=bun-darwin-x64 --outfile specchio-x64 src/index.ts
 ```
 
 ### Testing
@@ -316,13 +316,13 @@ To create a new release:
 1. Update the version in `package.json` and `src/index.ts`
 2. Build binaries for both architectures:
    ```bash
-   bun build --compile --target=bun-darwin-arm64 --outfile specchio-setup-arm64 src/index.ts
-   bun build --compile --target=bun-darwin-x64 --outfile specchio-setup-x64 src/index.ts
+   bun build --compile --target=bun-darwin-arm64 --outfile specchio-arm64 src/index.ts
+   bun build --compile --target=bun-darwin-x64 --outfile specchio-x64 src/index.ts
    ```
 3. Generate SHA256 checksums:
    ```bash
-   shasum -a 256 specchio-setup-arm64
-   shasum -a 256 specchio-setup-x64
+   shasum -a 256 specchio-arm64
+   shasum -a 256 specchio-x64
    ```
 4. Update the Homebrew formula with the new checksums
 5. Create a new GitHub release with the binaries

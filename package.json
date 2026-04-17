@@ -1,15 +1,15 @@
 {
-  "name": "specchio-setup",
+  "name": "specchio",
   "version": "1.0.0",
   "description": "Interactive setup CLI for Specchio",
   "type": "module",
   "bin": {
-    "specchio-setup": "./dist/index.js"
+    "specchio": "./dist/index.js"
   },
   "scripts": {
     "dev": "bun --watch src/index.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",
-    "build:standalone": "bun build src/index.ts --compile --outfile specchio-setup",
+    "build:standalone": "bun build src/index.ts --compile --outfile specchio",
     "build:all": "bash scripts/build-all.sh",
     "test": "bun test",
     "test:watch": "bun test --watch",

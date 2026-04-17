@@ -82,7 +82,7 @@ describe('parseDeviceInfo', () => {
 **Purpose**: Test complete workflows and command execution
 
 **Scope**:
-- Full check commands (e.g., `specchio-setup check`)
+- Full check commands (e.g., `specchio check`)
 - Command-line argument parsing
 - Output formatting and user interactions
 - Error handling across multiple components
@@ -155,10 +155,10 @@ describe('checkMacOSVersion', () => {
 **Test Cases**:
 ```bash
 # Basic smoke tests
-specchio-setup --version
-specchio-setup --help
-specchio-setup check --help
-specchio-setup doctor
+specchio --version
+specchio --help
+specchio check --help
+specchio doctor
 ```
 
 ## 3. Test Framework
