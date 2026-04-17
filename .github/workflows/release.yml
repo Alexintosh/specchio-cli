@@ -25,7 +25,6 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        working-directory: ./cli
         run: bun install
 
       - name: Extract version from tag
@@ -33,19 +32,19 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Build for ARM64 (Apple Silicon)
-        working-directory: ./cli
+        
         run: |
           bun build --compile --target=bun-darwin-arm64 --outfile specchio-arm64 src/index.ts
           chmod +x specchio-arm64
 
       - name: Build for x64 (Intel)
-        working-directory: ./cli
+        
         run: |
           bun build --compile --target=bun-darwin-x64 --outfile specchio-x64 src/index.ts
           chmod +x specchio-x64
 
       - name: Generate SHA256 checksums
-        working-directory: ./cli
+        
         run: |
           echo "Generating checksums..."
           ARM64_SHA256=$(shasum -a 256 specchio-arm64 | awk '{print $1}')
@@ -62,7 +61,7 @@ jobs:
           echo "$X64_SHA256  specchio-x64" >> checksums.txt
 
       - name: Create universal binary wrapper
-        working-directory: ./cli
+        
         run: |
           cat > specchio << 'EOF'
           #!/bin/bash
@@ -91,10 +90,10 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            cli/specchio-arm64
-            cli/specchio-x64
-            cli/specchio
-            cli/checksums.txt
+            specchio-arm64
+            specchio-x64
+            specchio
+            checksums.txt
           generate_release_notes: true
           draft: false
           prerelease: false
@@ -102,7 +101,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Homebrew formula
-        working-directory: ./cli/brew
+        /brew
         run: |
           VERSION="${{ steps.version.outputs }}"
 
@@ -128,7 +127,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add cli/brew/specchio.rb
+          git add brew/specchio.rb
           git commit -m "chore: update Homebrew formula for v${{ steps.version.outputs }}"
           git push
 
