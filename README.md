@@ -5,7 +5,7 @@
 
 **Interactive setup CLI for Specchio iOS development environment.**
 
-Specchio Setup CLI simplifies the process of setting up a macOS development environment for iOS app development and deployment. It automatically checks your system configuration, guides you through installing required tools (Xcode, iOS SDK, code signing certificates), and helps you connect and configure your iOS devices for development.
+Specchio Setup CLI simplifies the process of setting up a macOS development environment for the [Specchio App](https://specchio.space/) . It automatically checks your system configuration, guides you through installing required tools (Xcode, iOS SDK, code signing certificates), and helps you connect and configure your iOS devices for development.
 
 ## Installation
 
@@ -305,9 +305,8 @@ console.log(`You selected: ${options[selectedIndex]}`);
 
 ## Documentation
 
-- [Installation Guide](https://specchio.dev/installation)
-- [Device Setup Guide](https://specchio.dev/device-setup)
-- [Troubleshooting](https://specchio.dev/troubleshooting)
+Extensive documentation is available in the docs website.
+- [Installation Guide](https://docs.specchio.space/installation.html)
 
 ## Creating a Release
 
@@ -335,18 +334,3 @@ Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTIN
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-- **Issues**: [GitHub Issues](https://github.com/Alexintosh/specchio/issues)
-- **Documentation**: [https://specchio.dev](https://specchio.dev)
-- **Email**: support@specchio.dev
-
-## Acknowledgments
-
-- Built with [Bun](https://bun.sh/)
-- UI inspiration from various CLI tools including [create-react-app](https://github.com/facebook/create-react-app) and [Next.js CLI](https://github.com/vercel/next.js)
-
----
-
-Made with ❤️ by the Specchio team
