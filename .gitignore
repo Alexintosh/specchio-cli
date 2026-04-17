@@ -8,9 +8,9 @@ dist/
 *.binary
 
 # Standalone binaries
-specchio-setup
-specchio-setup-arm64
-specchio-setup-x64
+specchio
+specchio-arm64
+specchio-x64
 
 # Logs
 *.log
