@@ -32,19 +32,16 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Build for ARM64 (Apple Silicon)
-        
         run: |
           bun build --compile --target=bun-darwin-arm64 --outfile specchio-arm64 src/index.ts
           chmod +x specchio-arm64
 
       - name: Build for x64 (Intel)
-        
         run: |
           bun build --compile --target=bun-darwin-x64 --outfile specchio-x64 src/index.ts
           chmod +x specchio-x64
 
       - name: Generate SHA256 checksums
-        
         run: |
           echo "Generating checksums..."
           ARM64_SHA256=$(shasum -a 256 specchio-arm64 | awk '{print $1}')
@@ -61,11 +58,10 @@ jobs:
           echo "$X64_SHA256  specchio-x64" >> checksums.txt
 
       - name: Create universal binary wrapper
-        
         run: |
           cat > specchio << 'EOF'
           #!/bin/bash
-          # Universal wrapper for Specchio Setup CLI
+          # Universal wrapper for Specchio CLI
 
           # Detect architecture
           ARCH=$(uname -m)
@@ -101,34 +97,54 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Homebrew formula
-        /brew
         run: |
           VERSION="${{ steps.version.outputs }}"
 
-          # Update version in formula
-          sed -i.bak "s/tag:      \"v[^\"]*\"/tag:      \"v$VERSION\"/g" specchio.rb
-          sed -i.bak "s/root_url \"https:\/\/github.com\/Alexintosh\/specchio\/releases\/download\/v[^\"]*\"/root_url \"https:\/\/github.com\/Alexintosh\/specchio\/releases\/download\/v$VERSION\"/g" specchio.rb
+          # Clone homebrew-specchio tap
+          git clone https://github.com/Alexintosh/homebrew-specchiotmp homebrew-tap
+          cd homebrew-tap
 
-          # Update checksums
-          sed -i.bak "s/arm64_sonoma:   \"[^\"]*\"/arm64_sonoma:   \"${{ env.ARM64_SHA256 }}\"/g" specchio.rb
-          sed -i.bak "s/arm64_ventura:  \"[^\"]*\"/arm64_ventura:  \"${{ env.X64_SHA256 }}\"/g" specchio.rb
-          sed -i.bak "s/arm64_monterey: \"[^\"]*\"/arm64_monterey: \"${{ env.X64_SHA256 }}\"/g" specchio.rb
-          sed -i.bak "s/x86_64_sonoma:   \"[^\"]*\"/x86_64_sonoma:   \"${{ env.X64_SHA256 }}\"/g" specchio.rb
-          sed -i.bak "s/x86_64_ventura:  \"[^\"]*\"/x86_64_ventura:  \"${{ env.X64_SHA256 }}\"/g" specchio.rb
-          sed -i.bak "s/x86_64_monterey: \"[^\"]*\"/x86_64_monterey: \"${{ env.X64_SHA256 }}\"/g" specchio.rb
+          # Update formula with new version and checksums
+          cat > Formula/specchio.rb << FORMULA_EOF
+          # typed: true
+          # frozen_string_literal: true
 
-          # Clean up backup
-          rm -f specchio.rb.bak
+          class Specchio < Formula
+            desc "Interactive setup CLI for Specchio iOS development environment"
+            homepage "https://github.com/Alexintosh/specchio-cli"
+            url "https://github.com/Alexintosh/specchio-cli.git",
+                tag:      "v$VERSION",
+                revision: "main"
+            license "MIT"
 
-          echo "Updated formula:"
-          cat specchio.rb
+            bottle do
+              root_url "https://github.com/Alexintosh/specchio-cli/releases/download/v$VERSION"
+              sha256 cellar: :any_skip_relocation, arm64_sonoma:   "${{ env.ARM64_SHA256 }}"
+              sha256 cellar: :any_skip_relocation, arm64_ventura:  "${{ env.X64_SHA256 }}"
+              sha256 cellar: :any_skip_relocation, arm64_monterey: "${{ env.X64_SHA256 }}"
+              sha256 cellar: :any_skip_relocation, x86_64_sonoma:   "${{ env.X64_SHA256 }}"
+              sha256 cellar: :any_skip_relocation, x86_64_ventura:  "${{ env.X64_SHA256 }}"
+              sha256 cellar: :any_skip_relocation, x86_64_monterey: "${{ env.X64_SHA256 }}"
+            end
 
-      - name: Commit formula changes
-        run: |
+            depends_on "bun"
+
+            def install
+              bin.install "specchio"
+            end
+
+            test do
+              assert_match "specchio v", shell_output("#{bin}/specchio --version")
+              assert_match "Interactive setup CLI", shell_output("#{bin}/specchio --help")
+            end
+          end
+          FORMULA_EOF
+
+          # Commit and push changes
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add brew/specchio.rb
-          git commit -m "chore: update Homebrew formula for v${{ steps.version.outputs }}"
+          git add Formula/specchio.rb
+          git commit -m "chore: update Homebrew formula for v$VERSION" || echo "No changes to commit"
           git push
 
       - name: Create release summary
@@ -142,13 +158,11 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Installation" >> $GITHUB_STEP_SUMMARY
           echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "# Download and install" >> $GITHUB_STEP_SUMMARY
-          echo "curl -fsSL https://github.com/Alexintosh/specchio/releases/download/v${{ steps.version.outputs }}/specchio -o specchio" >> $GITHUB_STEP_SUMMARY
-          echo "chmod +x specchio" >> $GITHUB_STEP_SUMMARY
-          echo "./specchio" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "# Via Homebrew" >> $GITHUB_STEP_SUMMARY
+          echo "brew tap Alexintosh/specchio" >> $GITHUB_STEP_SUMMARY
+          echo "brew install specchio" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Homebrew" >> $GITHUB_STEP_SUMMARY
-          echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "brew install Alexintosh/specchio/specchio" >> $GITHUB_STEP_SUMMARY
+          echo "# Or download binary" >> $GITHUB_STEP_SUMMARY
+          echo "curl -fsSL https://github.com/Alexintosh/specchio-cli/releases/download/v${{ steps.version.outputs }}/specchio -o specchio" >> $GITHUB_STEP_SUMMARY
+          echo "chmod +x specchio" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
