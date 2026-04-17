@@ -7,10 +7,10 @@ dist/
 *.o
 *.binary
 
-# Standalone binaries
-specchio
-specchio-arm64
-specchio-x64
+# Standalone binaries (temporarily included in releases)
+# specchio
+# specchio-arm64
+# specchio-x64
 
 # Logs
 *.log

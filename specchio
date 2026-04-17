@@ -1,0 +1,18 @@
+#!/bin/bash
+# Universal wrapper for Specchio CLI
+
+# Detect architecture
+ARCH=$(uname -m)
+
+case "$ARCH" in
+  arm64|aarch64)
+    exec "$(dirname "$0")/specchio-arm64" "$@"
+    ;;
+  x86_64|i386)
+    exec "$(dirname "$0")/specchio-x64" "$@"
+    ;;
+  *)
+    echo "Error: Unsupported architecture: $ARCH" >&2
+    exit 1
+    ;;
+esac
