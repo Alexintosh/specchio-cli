@@ -21,23 +21,18 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        working-directory: ./cli
         run: bun install
 
       - name: Run tests
-        working-directory: ./cli
         run: bun test
 
       - name: Build CLI
-        working-directory: ./cli
         run: bun run build
 
       - name: Build standalone binary
-        working-directory: ./cli
         run: bun run build:standalone
 
       - name: Verify binary executes
-        working-directory: ./cli
         run: |
           ./specchio --version || true
           ./specchio --help || true
